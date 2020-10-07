@@ -172,6 +172,10 @@
 	#include "../away/meatstation/meatstation.dm"
 	#include "../away/miningstation/miningstation.dm"
 
+	//[INF]
+	#include "../example/compile_required_snatch.dm"
+	//[/INF]
+
 	#include "../../code/datums/music_tracks/chasing_time.dm"
 	#include "torch_inf.dm" //for lower conflicts list, its placed here
 
