@@ -11828,13 +11828,6 @@
 /obj/effect/floor_decal/techfloor,
 /turf/simulated/floor/tiled/techfloor/grid,
 /area/engineering/bluespace)
-"auZ" = (
-/obj/machinery/door/firedoor,
-/obj/effect/wallframe_spawn/reinforced/polarized/no_grille/regular{
-	id = "cafe_windows"
-	},
-/turf/simulated/floor/plating,
-/area/crew_quarters/cafe)
 "ava" = (
 /obj/machinery/door/firedoor,
 /obj/machinery/navbeacon/sierra/SD_forehallway2,
@@ -20450,7 +20443,7 @@
 /obj/effect/floor_decal/industrial/outline/blue,
 /obj/machinery/atmospherics/binary/pump/on{
 	dir = 8;
-	name = "Air to Supply"
+	name = "Air to Portables"
 	},
 /turf/simulated/floor/tiled/techfloor,
 /area/engineering/atmos)
@@ -35924,13 +35917,6 @@
 /obj/effect/floor_decal/spline/fancy/black{
 	dir = 10
 	},
-/obj/machinery/button/windowtint{
-	dir = 4;
-	id = "cafe_windows";
-	pixel_x = -23;
-	range = 9;
-	pixel_y = -10
-	},
 /turf/simulated/floor/wood/ebony,
 /area/crew_quarters/bar)
 "hSe" = (
@@ -36398,11 +36384,9 @@
 /turf/simulated/floor/grass,
 /area/bridge/lobby)
 "jnf" = (
-/obj/effect/wallframe_spawn/reinforced/polarized/no_grille/regular{
-	id = "cafe_windows"
-	},
 /obj/structure/disposalpipe/segment,
 /obj/machinery/door/firedoor,
+/obj/effect/wallframe_spawn/reinforced/polarized/no_grille/regular,
 /turf/simulated/floor/plating,
 /area/crew_quarters/cafe)
 "jny" = (
@@ -37699,10 +37683,8 @@
 /turf/space,
 /area/space)
 "mXt" = (
-/obj/effect/wallframe_spawn/reinforced/polarized/no_grille/regular{
-	id = "cafe_windows"
-	},
 /obj/machinery/door/firedoor,
+/obj/effect/wallframe_spawn/reinforced/polarized/no_grille/regular,
 /turf/simulated/floor/plating,
 /area/crew_quarters/cafe)
 "mXL" = (
@@ -39440,6 +39422,7 @@
 	d2 = 4;
 	icon_state = "1-4"
 	},
+/obj/effect/floor_decal/industrial/traffic,
 /turf/simulated/floor/reinforced/airless,
 /area/bridge/nano)
 "rSZ" = (
@@ -41420,10 +41403,8 @@
 /area/crew_quarters/lounge_big)
 "xiq" = (
 /obj/machinery/door/firedoor,
-/obj/effect/wallframe_spawn/reinforced/polarized/no_grille/regular{
-	id = "cafe_windows"
-	},
 /obj/structure/disposalpipe/segment,
+/obj/effect/wallframe_spawn/reinforced/polarized/no_grille/regular,
 /turf/simulated/floor/plating,
 /area/crew_quarters/cafe)
 "xiV" = (
@@ -41615,6 +41596,18 @@
 	},
 /turf/simulated/floor/tiled/steel_grid,
 /area/engineering/engine_eva)
+"xKh" = (
+/obj/effect/floor_decal/spline/fancy/wood{
+	dir = 1
+	},
+/obj/machinery/button/windowtint{
+	dir = 2;
+	id = "sierra_surgery2";
+	pixel_x = -5;
+	pixel_y = 28
+	},
+/turf/simulated/floor/wood/walnut,
+/area/crew_quarters/cafe)
 "xMX" = (
 /obj/effect/floor_decal/spline/fancy/wood{
 	dir = 8
@@ -57807,7 +57800,7 @@ gpb
 arg
 mlC
 aHT
-auZ
+mXt
 aHs
 mjR
 aJQ
@@ -58414,7 +58407,7 @@ oWa
 hdV
 aId
 kmC
-auZ
+mXt
 kub
 aRr
 avG
@@ -58616,7 +58609,7 @@ ark
 deW
 auh
 axY
-auZ
+mXt
 kub
 arG
 aFq
@@ -59215,7 +59208,7 @@ bIE
 ajr
 pbO
 wQu
-pnB
+xKh
 vzV
 dFH
 plM

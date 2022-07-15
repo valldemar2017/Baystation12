@@ -30481,6 +30481,10 @@
 	},
 /turf/simulated/wall/prepainted,
 /area/maintenance/thirddeck/aft)
+"Yb" = (
+/obj/structure/sign/warning/hot_exhaust,
+/turf/simulated/wall/r_wall/hull,
+/area/vacant/cargo)
 "Yd" = (
 /obj/effect/paint/dark_gunmetal,
 /obj/structure/sign/nanotrasen,
@@ -59712,7 +59716,7 @@ zp
 Ap
 Aw
 Ax
-Or
+Yb
 Is
 Is
 Is
