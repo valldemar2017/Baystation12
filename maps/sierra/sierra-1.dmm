@@ -833,6 +833,10 @@
 	dir = 4
 	},
 /obj/effect/floor_decal/industrial/hatch/yellow,
+/obj/structure/closet/emcloset{
+	anchored = 1;
+	name = "anchored emergency closet"
+	},
 /turf/simulated/floor/tiled/techfloor/grid,
 /area/hallway/primary/thirddeck/fore)
 "bR" = (
@@ -6096,7 +6100,7 @@
 /turf/simulated/floor/tiled/white,
 /area/shuttle/petrov/airlock)
 "kf" = (
-/obj/structure/closet/medical_wall/filled/small_shuttle{
+/obj/structure/closet/walllocker/medical/filled/small_shuttle{
 	pixel_x = 28
 	},
 /obj/effect/floor_decal/borderfloorwhite{
@@ -7722,7 +7726,7 @@
 /turf/simulated/floor/tiled/white,
 /area/shuttle/petrov/test_room)
 "mm" = (
-/obj/structure/closet/secure_closet/explo_gun{
+/obj/structure/closet/walllocker/secure_closet/explo_gun{
 	pixel_y = 32
 	},
 /obj/effect/floor_decal/borderfloor{
@@ -16761,7 +16765,7 @@
 /obj/effect/floor_decal/corner/blue/border{
 	dir = 4
 	},
-/obj/structure/closet/medical_wall/filled/shuttle{
+/obj/structure/closet/walllocker/medical/filled/shuttle{
 	pixel_x = 24
 	},
 /obj/structure/table/reinforced,
@@ -18978,7 +18982,9 @@
 /turf/simulated/floor/tiled,
 /area/hallway/primary/thirddeck/fore)
 "Eb" = (
-/obj/structure/closet/crate/internals/fuel,
+/obj/structure/closet/crate/internals/fuel{
+	icon_state = "crate"
+	},
 /obj/effect/floor_decal/industrial/outline/grey,
 /turf/simulated/floor/tiled/techfloor/grid,
 /area/quartermaster/storage)
@@ -19767,6 +19773,17 @@
 	},
 /turf/simulated/floor/tiled,
 /area/quartermaster/deckofficer)
+"Fu" = (
+/obj/structure/closet/emcloset{
+	anchored = 1;
+	name = "anchored emergency closet"
+	},
+/obj/effect/floor_decal/corner/lightgrey/mono,
+/obj/effect/floor_decal/industrial/outline/yellow,
+/obj,
+/obj,
+/turf/simulated/floor/tiled/monotile,
+/area/hallway/primary/thirddeck/fore)
 "Fv" = (
 /obj/machinery/atmospherics/portables_connector{
 	dir = 4
@@ -20368,13 +20385,13 @@
 /turf/simulated/floor/plating,
 /area/exploration_shuttle/cargo_r)
 "Gw" = (
-/obj/structure/closet/firecloset,
 /obj/effect/floor_decal/industrial/outline/yellow,
 /obj/machinery/atmospherics/binary/pump/high_power/on{
 	dir = 4;
 	name = "CO2 Supply";
 	target_pressure = 10000
 	},
+/obj/structure/closet/hydrant,
 /turf/simulated/floor/tiled/monotile,
 /area/quartermaster/hangar)
 "Gx" = (
@@ -26457,7 +26474,7 @@
 /obj/machinery/atmospherics/pipe/simple/hidden/supply{
 	dir = 9
 	},
-/obj/structure/closet/medical_wall/filled/regular{
+/obj/structure/closet/walllocker/medical/filled{
 	pixel_y = -24
 	},
 /obj/random/drinkbottle,
@@ -26921,7 +26938,7 @@
 /obj/machinery/sleeper/survival_pod{
 	dir = 8
 	},
-/obj/structure/closet/medical_wall/filled/small_shuttle{
+/obj/structure/closet/walllocker/medical/filled/small_shuttle{
 	pixel_y = 32
 	},
 /obj/machinery/camera/network/pod{
@@ -29986,7 +30003,7 @@
 	d2 = 8;
 	icon_state = "4-8"
 	},
-/obj/structure/closet/hydrant{
+/obj/structure/closet/walllocker/firecloset{
 	pixel_y = 32
 	},
 /obj/effect/floor_decal/corner/lime/border{
@@ -44515,7 +44532,7 @@ Is
 Is
 Is
 fB
-kp
+Fu
 KJ
 Lu
 uM

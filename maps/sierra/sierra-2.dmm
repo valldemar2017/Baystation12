@@ -856,7 +856,7 @@
 /obj/effect/floor_decal/corner/green/bordercorner{
 	dir = 1
 	},
-/obj/structure/closet/shipping_wall/filled{
+/obj/structure/closet/walllocker/shipping_wall/filled{
 	pixel_x = -32;
 	pixel_y = 32
 	},
@@ -1016,7 +1016,7 @@
 "acc" = (
 /obj/effect/floor_decal/industrial/outline/grey,
 /obj/machinery/portable_atmospherics/canister/phoron,
-/obj/structure/closet/shipping_wall/filled{
+/obj/structure/closet/walllocker/shipping_wall/filled{
 	pixel_x = -25;
 	pixel_y = 4
 	},
@@ -2474,7 +2474,7 @@
 /area/hydroponics)
 "aeX" = (
 /obj/machinery/vending/dinnerware,
-/obj/structure/closet/shipping_wall/filled{
+/obj/structure/closet/walllocker/shipping_wall/filled{
 	pixel_x = 25
 	},
 /obj/effect/floor_decal/corner/paleblue/diagonal,
@@ -3103,7 +3103,7 @@
 /turf/simulated/open,
 /area/maintenance/seconddeck/aftstarboard)
 "agc" = (
-/obj/structure/closet/medical_wall/filled/regular{
+/obj/structure/closet/walllocker/medical/filled{
 	pixel_y = 32
 	},
 /obj/effect/floor_decal/borderfloor{
@@ -3547,7 +3547,7 @@
 /turf/simulated/floor/bluegrid,
 /area/engineering/bluespace/chamber)
 "agE" = (
-/obj/structure/closet/shipping_wall,
+/obj/structure/closet/walllocker/shipping_wall,
 /turf/simulated/wall/prepainted,
 /area/crew_quarters/sleep/bunk)
 "agF" = (
@@ -6513,7 +6513,9 @@
 /turf/simulated/floor/tiled/techfloor/grid,
 /area/crew_quarters/actor)
 "amg" = (
-/obj/structure/closet/crate/internals/fuel,
+/obj/structure/closet/crate/internals/fuel{
+	icon_state = "crate"
+	},
 /obj/effect/floor_decal/industrial/outline/grey,
 /obj/structure/cable{
 	d1 = 1;
@@ -8129,8 +8131,8 @@
 /obj/effect/floor_decal/borderfloorblack,
 /obj/effect/floor_decal/industrial/danger,
 /obj/structure/window/reinforced,
-/obj/structure/closet/firecloset,
 /obj/effect/floor_decal/industrial/outline/yellow,
+/obj/structure/closet/hydrant,
 /turf/simulated/floor/tiled/techfloor,
 /area/bridge/hall/level_one)
 "aoV" = (
@@ -9915,7 +9917,7 @@
 	dir = 8;
 	pixel_x = 32
 	},
-/obj/structure/closet/medical_wall/filled/engineering{
+/obj/structure/closet/walllocker/medical/filled/engineering{
 	pixel_y = 32
 	},
 /obj/effect/floor_decal/borderfloor{
@@ -13357,7 +13359,7 @@
 /turf/simulated/floor/tiled,
 /area/hallway/primary/seconddeck/fore)
 "axO" = (
-/obj/structure/closet/hydrant{
+/obj/structure/closet/walllocker/firecloset{
 	pixel_y = 32
 	},
 /obj/effect/floor_decal/borderfloor{
@@ -20510,7 +20512,7 @@
 	dir = 4;
 	icon_state = "pipe-c"
 	},
-/obj/structure/closet/medical_wall/filled/regular{
+/obj/structure/closet/walllocker/medical/filled{
 	pixel_y = 32
 	},
 /obj/effect/floor_decal/techfloor{
@@ -33537,7 +33539,7 @@
 /area/bridge/lobby)
 "bkI" = (
 /obj/machinery/atmospherics/pipe/simple/hidden/scrubbers,
-/obj/structure/closet/hydrant{
+/obj/structure/closet/walllocker/firecloset{
 	pixel_x = 25
 	},
 /obj/effect/catwalk_plated,

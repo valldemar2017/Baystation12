@@ -1,10 +1,14 @@
 /obj/structure/closet
 	name = "closet"
 	desc = "It's a basic storage unit."
-	icon = 'icons/obj/closets/bases/closet.dmi'
-	icon_state = "base"
+	icon = 'icons/obj/closets/closet.dmi'
+	icon_state = "generic"
 	density = TRUE
 	w_class = ITEM_SIZE_NO_CONTAINER
+
+	var/icon_door = null
+	var/icon_door_override = FALSE //override to have open overlay use icon different to its base's
+	var/icon_door_overlay = "" //handles secure locker overlays like the locking lights
 
 	var/welded = 0
 	var/large = 1
@@ -29,10 +33,25 @@
 	var/code2[8]
 	var/validate = 0
 	var/codelen
+	var/obj/effect/overlay/closet_door/door_obj
+	var/obj/effect/overlay/closet_door/door_obj_alt
+	var/secure = FALSE //secure locker or not. typically it shouldn't need lights if it's insecure
+	var/secure_lights = FALSE // whether to display secure lights when open.
+	var/is_animating_door = FALSE
+	var/door_underlay = FALSE //used if you want to have an overlay below the door. used for guncabinets.
+	var/door_anim_squish = 0.12 // Multiplier on proc/get_door_transform. basically, how far you want this to swing out. value of 1 means the length of the door is unchanged (and will swing out of the tile), 0 means it will just slide back and forth.
+	var/door_anim_angle = 147
+	var/door_hinge = -6.5 // for closets, x away from the centre of the closet. typically good to add a 0.5 so it's centered on the edge of the closet.
+	var/door_hinge_alt = 6.5 // for closets with two doors. why a seperate var? because some closets may be weirdly shaped or something.
+	var/door_anim_time = 2.5 // set to 0 to m
+	var/list/starts_with // for pre-filled items
+	var/double_doors = FALSE
+	var/dense_when_open = FALSE
+	var/store_structures = FALSE
 
-/obj/structure/closet/Initialize()
+/obj/structure/closet/Initialize(mapload, var/need_fill)
 	..()
-
+	update_icon()
 	if((setup & CLOSET_HAS_LOCK))
 		verbs += /obj/structure/closet/proc/togglelock_verb
 
@@ -43,14 +62,31 @@
 			code1[i] = rand(0,9)
 			code2[i] = rand(0,9)
 
-	if(ispath(closet_appearance))
+	return mapload ? INITIALIZE_HINT_LATELOAD : INITIALIZE_HINT_NORMAL
+
+
+// Override this to fill the storage object with stuff.
+/* /obj/structure/closet/proc/fill()
+	if(LAZYLEN(starts_with))
+		for(var/t in starts_with)
+			if(!ispath(t))
+				crash_with("[t] in [src]'s starts_with list is not a path!")
+				continue
+			for(var/i=0, i<starts_with[t], i++)
+				new t(src)
+	return
+
+*/
+
+/*	if(ispath(closet_appearance))
 		var/decl/closet_appearance/app = decls_repository.get_decl(closet_appearance)
 		if(app)
 			icon = app.icon
 			color = null
-			queue_icon_update()
+
 
 	return INITIALIZE_HINT_LATELOAD
+ */
 
 /obj/structure/closet/LateInitialize(mapload, ...)
 	var/list/will_contain = WillContain()
@@ -126,10 +162,14 @@
 		return 0
 
 	src.dump_contents()
-
-	src.opened = 1
+	animate_door(FALSE)
+	if(double_doors)
+		animate_door_alt(FALSE)
+	update_icon()
+	src.opened = TRUE
 	playsound(src.loc, open_sound, 50, 1, -3)
-	density = FALSE
+	if(!dense_when_open)
+		density = FALSE
 	update_icon()
 	return 1
 
@@ -145,7 +185,9 @@
 	playsound(src.loc, close_sound, 50, 0, -3)
 	if(!wall_mounted)
 		density = TRUE
-
+	animate_door(TRUE)
+	if(double_doors)
+		animate_door_alt(TRUE)
 	update_icon()
 
 	return 1
@@ -409,19 +451,36 @@
 	else
 		to_chat(usr, "<span class='warning'>This mob type can't use this verb.</span>")
 
-/obj/structure/closet/on_update_icon()
-	if(opened)
-		icon_state = "open"
+
+/obj/structure/closet/update_icon()
+	if(!door_underlay)
 		overlays.Cut()
-	else
-		if(broken)
-			icon_state = "closed_emagged[welded ? "_welded" : ""]"
-		else
-			if(locked)
-				icon_state = "closed_locked[welded ? "_welded" : ""]"
-			else
-				icon_state = "closed_unlocked[welded ? "_welded" : ""]"
-			overlays.Cut()
+
+	if(!opened)
+		layer = OBJ_LAYER
+		if(welded)
+			add_overlay("[icon_door_overlay]welded")
+
+		if(!is_animating_door)
+			if(icon_door)
+				add_overlay("[icon_door]_door")
+				if(double_doors)
+					add_overlay("[icon_door]_door_alt")
+			if(!icon_door)
+				add_overlay("[icon_state]_door")
+				if(double_doors)
+					add_overlay("[icon_state]_door_alt")
+			if(secure)
+				update_secure_overlays()
+
+		if(secure && secure_lights)
+			update_secure_overlays()
+	else if(opened)
+		layer = BELOW_OBJ_LAYER
+		if(!is_animating_door)
+			add_overlay("[icon_door_override ? icon_door : icon_state]_open")
+		if(secure && secure_lights)
+			update_secure_overlays()
 
 /obj/structure/closet/take_damage(damage)
 	health -= damage
@@ -558,17 +617,25 @@
 	..()
 
 /obj/structure/closet/emag_act(var/remaining_charges, var/mob/user, var/emag_source, var/visual_feedback = "", var/audible_feedback = "")
-	if(make_broken())
+	if(!broken)
+		var/datum/effect/effect/system/spark_spread/spark_system = new /datum/effect/effect/system/spark_spread()
+		spark_system.set_up(5, 0, src.loc)
+		spark_system.start()
+		desc += " It appears to be broken."
+		add_overlay("[icon_door_overlay]sparking")
+		//CUT_OVERLAY_IN("[icon_door_overlay]sparking", 6)
+		playsound(loc, "spark_sound", 60, 1)
+		broken = TRUE
+		locked = FALSE
 		update_icon()
+
 		if(visual_feedback)
 			visible_message(visual_feedback, audible_feedback)
 		else if(user && emag_source)
-			visible_message("<span class='warning'>\The [src] has been broken by \the [user] with \an [emag_source]!</span>", "You hear a faint electrical spark.")
+			visible_message(SPAN_WARNING("\The [src] has been broken by \the [user] with \an [emag_source]!"), "You hear a faint electrical spark.")
 		else
-			visible_message("<span class='warning'>\The [src] sparks and breaks open!</span>", "You hear a faint electrical spark.")
+			visible_message(SPAN_WARNING("\The [src] sparks and breaks open!"), "You hear a faint electrical spark.")
 		return 1
-	else
-		. = ..()
 
 /obj/structure/closet/proc/make_broken()
 	if(broken)
@@ -579,6 +646,7 @@
 	locked = FALSE
 	desc += " It appears to be broken."
 	return TRUE
+
 
 /obj/structure/closet/CanUseTopicPhysical(mob/user)
 	return CanUseTopic(user, GLOB.physical_no_access_state)
@@ -597,7 +665,7 @@
 	for(var/i = 1 to codelen)
 		dat += "<td><a href='?src=\ref[src];dec=[i]'>-</a>"
 	dat += "</table><hr><a href='?src=\ref[src];check=1'>Сопоставить код</a>"
-		
+
 	user.set_machine(src)
 	var/datum/browser/popup = new(user, "closet", "[name]", 90 + codelen * 30, 200)
 	popup.set_content(dat)
@@ -655,4 +723,83 @@
 		if(code2[inc] < 0)
 			code2[inc] = 9
 		interact(user)
-//[/INF]
+
+
+/obj/structure/closet/proc/update_secure_overlays()
+	if(broken)
+		add_overlay("[icon_door_overlay]emag")
+	else
+		if(locked)
+			add_overlay("[icon_door_overlay]locked")
+		else
+			add_overlay("[icon_door_overlay]unlocked")
+
+
+/obj/structure/closet/proc/animate_door(var/closing = FALSE)
+	if(!door_anim_time)
+		return
+	if(!door_obj) door_obj = new
+	vis_contents |= door_obj
+	door_obj.icon = icon
+	door_obj.icon_state = "[icon_door || icon_state]_door"
+	is_animating_door = TRUE
+	var/num_steps = door_anim_time / world.tick_lag
+	for(var/step in 0 to num_steps)
+		var/angle = door_anim_angle * (closing ? 1 - (step/num_steps) : (step/num_steps))
+		var/matrix/M = get_door_transform(angle)
+		var/door_state = angle >= 90 ? "[icon_door_override ? icon_door : icon_state]_back" : "[icon_door || icon_state]_door"
+		var/door_layer = angle >= 90 ? FLOAT_LAYER : ABOVE_HUMAN_LAYER
+
+		if(step == 0)
+			door_obj.transform = M
+			door_obj.icon_state = door_state
+			door_obj.layer = door_layer
+		else if(step == 1)
+			animate(door_obj, transform = M, icon_state = door_state, layer = door_layer, time = world.tick_lag, flags = ANIMATION_END_NOW)
+		else
+			animate(transform = M, icon_state = door_state, layer = door_layer, time = world.tick_lag)
+	addtimer(CALLBACK(src,.proc/end_door_animation),door_anim_time,TIMER_UNIQUE|TIMER_OVERRIDE)
+
+/obj/structure/closet/proc/end_door_animation()
+	is_animating_door = FALSE
+	vis_contents -= door_obj
+	update_icon()
+
+/obj/structure/closet/proc/get_door_transform(angle, var/inverse_hinge = FALSE)
+	var/matrix/M = matrix()
+	var/matrix_door_hinge = inverse_hinge ? door_hinge_alt : door_hinge
+	M.Translate(-matrix_door_hinge, 0)
+	M.Multiply(matrix(cos(angle), 0, 0, ((matrix_door_hinge >= 0) ? sin(angle) : -sin(angle)) * door_anim_squish, 1, 0)) // this matrix door hinge >= 0 check is for door hinges on the right, so they swing out instead of upwards
+	M.Translate(matrix_door_hinge, 0)
+	return M
+
+/obj/structure/closet/proc/animate_door_alt(var/closing = FALSE)
+	if(!door_anim_time)
+		return
+	if(!door_obj_alt) door_obj_alt = new
+	vis_contents |= door_obj_alt
+	door_obj_alt.icon = icon
+	door_obj_alt.icon_state = "[icon_door || icon_state]_door_alt"
+	is_animating_door = TRUE
+	var/num_steps = door_anim_time / world.tick_lag
+	for(var/step in 0 to num_steps)
+		var/angle = door_anim_angle * (closing ? 1 - (step/num_steps) : (step/num_steps))
+		var/matrix/M = get_door_transform(angle, TRUE)
+		var/door_state = angle >= 90 ? "[icon_door_override ? icon_door : icon_state]_back_alt" : "[icon_door || icon_state]_door_alt"
+		var/door_layer = angle >= 90 ? FLOAT_LAYER : ABOVE_HUMAN_LAYER
+
+		if(step == 0)
+			door_obj_alt.transform = M
+			door_obj_alt.icon_state = door_state
+			door_obj_alt.layer = door_layer
+		else if(step == 1)
+			animate(door_obj_alt, transform = M, icon_state = door_state, layer = door_layer, time = world.tick_lag, flags = ANIMATION_END_NOW)
+		else
+			animate(transform = M, icon_state = door_state, layer = door_layer, time = world.tick_lag)
+	addtimer(CALLBACK(src,.proc/end_door_animation_alt),door_anim_time,TIMER_UNIQUE|TIMER_OVERRIDE)
+
+/obj/structure/closet/proc/end_door_animation_alt()
+	is_animating_door = FALSE // comment this out and the line below to manually tweak the animation end state by fiddling with the door_anim vars to match the open door icon
+	vis_contents -= door_obj_alt
+	update_icon()
+	compile_overlays(src)
