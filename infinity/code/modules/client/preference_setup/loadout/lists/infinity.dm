@@ -213,3 +213,111 @@
 /datum/gear/uniform/black_white
 	display_name = "black white"
 	path = /obj/item/clothing/under/inf/black_white
+
+/datum/gear/uniform/biker
+	display_name = "biker"
+	path = /obj/item/clothing/under/inf/biker
+
+/datum/gear/uniform/formalvest
+	display_name = "formal vest"
+	path = /obj/item/clothing/under/inf/formalvest
+
+/datum/gear/uniform/callum
+	display_name = "callum vest"
+	path = /obj/item/clothing/under/inf/callum
+
+/datum/gear/uniform/denimvest
+	display_name = "denim vest"
+	path = /obj/item/clothing/under/inf/denimvest
+
+/datum/gear/uniform/olympic
+	display_name = "olympic clothes"
+	path = /obj/item/clothing/under/inf/olympic
+
+/datum/gear/uniform/hm_suit
+	display_name = "charcoal vest"
+	path = /obj/item/clothing/under/inf/hm_suit
+
+/datum/gear/uniform/mafia
+	display_name = "mafia outfit selection"
+	path = /obj/item/clothing/under/inf/mafia
+
+/datum/gear/uniform/mafia/New()
+	..()
+	var/mafia = list()
+	mafia["mafia outfit"] = /obj/item/clothing/under/inf/mafia
+	mafia["mafia vest"] = /obj/item/clothing/under/inf/mafia/vest
+	mafia["white mafia outfit"] = /obj/item/clothing/under/inf/mafia/white
+	gear_tweaks += new/datum/gear_tweak/path(mafia)
+
+/datum/gear/uniform/maid
+	display_name = "maid dress"
+	path = /obj/item/clothing/under/inf/maid
+
+/datum/gear/uniform/noble
+	display_name = "artsy suit"
+	path = /obj/item/clothing/under/inf/noble
+
+
+/datum/gear/uniform/hawaiianshirt
+	display_name = "hawaiian shirt selection"
+	path = /obj/item/clothing/under/inf/redhawaiianshirt
+
+/datum/gear/uniform/hawaiianshirt/New()
+	..()
+	var/hawaiian = list()
+	hawaiian["red hawaiian shirt"] = /obj/item/clothing/under/inf/redhawaiianshirt
+	hawaiian["pink hawaiian shirt"] = /obj/item/clothing/under/inf/pinkhawaiianshirt
+	hawaiian["yellow hawaiian shirt"] = /obj/item/clothing/under/inf/yellowhawaiianshirt
+	hawaiian["blue hawaiian shirt"] = /obj/item/clothing/under/inf/bluehawaiianshirt
+	gear_tweaks += new/datum/gear_tweak/path(hawaiian)
+
+/datum/gear/uniform/cuban_suit
+	display_name = "rhumba outfit"
+	path = /obj/item/clothing/under/inf/cuban_suit
+
+/datum/gear/uniform/victdress
+	display_name = "victorian dress selection"
+	path = /obj/item/clothing/under/inf/victdress
+
+/datum/gear/uniform/victdress/New()
+	..()
+	var/dress = list()
+	dress["black victorian dress"] = /obj/item/clothing/under/inf/victdress
+	dress["red victorian dresst"] = /obj/item/clothing/under/inf/victdress/red
+	gear_tweaks += new/datum/gear_tweak/path(dress)
+
+/datum/gear/uniform/victsuit
+	display_name = "victorian suit selection"
+	path = /obj/item/clothing/under/inf/victsuit
+
+/datum/gear/uniform/victsuit/New()
+	..()
+	var/victsuit = list()
+	victsuit["victorian suit"] = /obj/item/clothing/under/inf/victsuit
+	victsuit["red and black victorian suit"] = /obj/item/clothing/under/inf/victsuit/redblk
+	victsuit["red victorian suit"] = /obj/item/clothing/under/inf/victsuit/red
+	victsuit["dark victorian suit"] = /obj/item/clothing/under/inf/victsuit/twilight
+	gear_tweaks += new/datum/gear_tweak/path(victsuit)
+
+/datum/gear/uniform/retro_security
+	display_name = "retro security officer's uniform"
+	allowed_roles = list(\
+	/datum/job/hos, /datum/job/warden, /datum/job/detective, /datum/job/officer, /datum/job/security_assistant)
+	path = /obj/item/clothing/under/inf/retro/security
+
+/datum/gear/uniform/retro_medical
+	display_name = "retro medical officer's uniform"
+	allowed_roles = list(\
+	/datum/job/cmo, /datum/job/senior_doctor, /datum/job/doctor,\
+	/datum/job/doctor_trainee, /datum/job/explorer_medic,\
+	/datum/job/psychiatrist, /datum/job/chemist, /datum/job/roboticist)
+	path = /obj/item/clothing/under/inf/retro/medical
+
+/datum/gear/uniform/retro_engineering
+	display_name = "retro engineering uniform"
+	path = /obj/item/clothing/under/inf/retro/engineering
+
+/datum/gear/uniform/retro_science
+	display_name = "retro science officer's uniform"
+	path = /obj/item/clothing/under/inf/retro/science
